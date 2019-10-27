@@ -1,4 +1,6 @@
-When dealing with anagram problems, you should have in your mind that there is a finite number of characters. In this problem, we only need to deal with 26 [a-z]. This is represented by an [Int] which each correspond to the number of occurrences a character has in the string. 
+When dealing with anagram problems, you should keep in mind that there is a finite number of characters. 
+
+In this problem, we only need to deal with 26 [a-z]. This is represented by an [Int] which each correspond to the number of occurrences a character has in the string. 
 
 In order to find the number of changes required, we need to sum of the absolute value of differences between the two zipped arrays, and then divide by 2 (2 differences will equate to one difference). 
 

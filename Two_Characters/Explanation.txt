@@ -1,0 +1,14 @@
+We first want to create a set of unique characters that we want to iterate over while constructing out unique sets. We still want do unique traversals so indexes is necessary. 
+
+ex. For set [A,B,C,D], we want to traverse: 
+
+A B 
+A C
+A D
+B C
+B D
+C D
+
+We iterate through these permutations, and process a count which tells us how much that iteration generates. 
+
+Func process will give me nil if the string turns out to be invalid. Figuring out whether or not it is invalid is done in a string extension where it matches to a regex. 

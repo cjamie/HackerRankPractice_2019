@@ -1,47 +1,46 @@
-
 import Foundation
 
-let string1 = "abc"
+//https://stackoverflow.com/questions/45504400/regex-match-pattern-of-alternating-characters
+private let alternatingRegex = "^([a-z])(?!\\1)([a-z])(?:\\1\\2)*\\1?$"
 
 extension String {
-    var halvedStrings: (start: String, end: String) {
-        return (
-            start: String(self[startIndex..<halfIndex]),
-            end: String(self[halfIndex..<endIndex])
-        )
+    var isAlternating: Bool {
+        return matches(alternatingRegex)
     }
     
-    private var halfIndex: Index {
-        return index(startIndex, offsetBy: count / 2)
+    func matches(_ regex: String) -> Bool {
+        return self.range(of: regex, options: .regularExpression, range: nil, locale: nil) != nil
     }
 }
 
-let halves = string1.halvedStrings
-print(halves)
-func constructFrequencyDistribution(from inputString: String) -> [Int] {
+let inputString = "beabeefeab"
+
+// we need to change it so that we only include two of the characters
+let characterSet = Array(Set(inputString))
+
+// this will iterate though input string and only include the int
+func process(first: Character, second: Character) -> Int? {
+    // we can allow access to this through a proxy
     
-    func characterToInt(_ character: Character) -> Int {
-        return Int(character.asciiValue!) - 97
+    let value = inputString.reduce("") { counter, next in
+        if next == first || next == second {
+            return counter + String(next)
+        } else {
+            return counter
+        }
     }
     
-    var counter = Array(repeating: 0, count: 26)
-    
-    inputString.forEach { value in
-        counter[characterToInt(value)] += 1
+    return value.isAlternating ? value.count : nil
+}
+
+var maxCounter = 0
+
+for i in stride(from: 0, to: characterSet.count, by: 1) {
+    for j in stride(from: i+1, to: characterSet.count, by: 1) {
+        if let newValue = process(first: characterSet[i], second: characterSet[j]) {
+            maxCounter = max(maxCounter, newValue)
+        }
     }
-    
-    return counter
 }
 
-
-let zipped = zip(
-    constructFrequencyDistribution(from: halves.start),
-    constructFrequencyDistribution(from: halves.end)
-)
-
-let numberOfNumbersRequired = zipped.reduce(0) { counter, next in
-    let difference = abs(next.0 - next.1)
-    return counter + difference
-}
-
-print((numberOfNumbersRequired + 1)/2)
+print(maxCounter)

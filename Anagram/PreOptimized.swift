@@ -54,7 +54,7 @@ func anagram(s: String) -> Int {
         return counter + difference
     }
     
-    return (numberOfNumbersRequired + 1)/2
+    return numberOfNumbersRequired/2
 }
 
 let stdout = ProcessInfo.processInfo.environment["OUTPUT_PATH"]!

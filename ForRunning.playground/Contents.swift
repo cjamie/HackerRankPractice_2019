@@ -1,32 +1,47 @@
+
 import Foundation
 
-// Complete the checkMagazine function below.
-func checkMagazine(magazine: [String], note: [String]) -> Void {
+let string1 = "abc"
+
+extension String {
+    var halvedStrings: (start: String, end: String) {
+        return (
+            start: String(self[startIndex..<halfIndex]),
+            end: String(self[halfIndex..<endIndex])
+        )
+    }
     
+    private var halfIndex: Index {
+        return index(startIndex, offsetBy: count / 2)
+    }
+}
+
+let halves = string1.halvedStrings
+print(halves)
+func constructFrequencyDistribution(from inputString: String) -> [Int] {
     
+    func characterToInt(_ character: Character) -> Int {
+        return Int(character.asciiValue!) - 97
+    }
+    
+    var counter = Array(repeating: 0, count: 26)
+    
+    inputString.forEach { value in
+        counter[characterToInt(value)] += 1
+    }
+    
+    return counter
 }
 
-guard let mnTemp = readLine() else { fatalError("Bad input") }
-let mn = mnTemp.split(separator: " ").map{ String($0) }
 
-guard let m = Int(mn[0].trimmingCharacters(in: .whitespacesAndNewlines))
-    else { fatalError("Bad input") }
+let zipped = zip(
+    constructFrequencyDistribution(from: halves.start),
+    constructFrequencyDistribution(from: halves.end)
+)
 
-guard let n = Int(mn[1].trimmingCharacters(in: .whitespacesAndNewlines))
-    else { fatalError("Bad input") }
-
-guard let magazineTemp = readLine() else { fatalError("Bad input") }
-let magazine: [String] = magazineTemp.split(separator: " ").map {
-    String($0)
+let numberOfNumbersRequired = zipped.reduce(0) { counter, next in
+    let difference = abs(next.0 - next.1)
+    return counter + difference
 }
 
-guard magazine.count == m else { fatalError("Bad input") }
-
-guard let noteTemp = readLine() else { fatalError("Bad input") }
-let note: [String] = noteTemp.split(separator: " ").map {
-    String($0)
-}
-
-guard note.count == n else { fatalError("Bad input") }
-
-checkMagazine(magazine: magazine, note: note)
+print((numberOfNumbersRequired + 1)/2)

@@ -1,25 +1,24 @@
 import Foundation
+import CommonCrypto
 
-extension String {
-    
-}
-
-
-extension Character {
-    var isASCIIShiftable: Bool {
-        guard let value = asciiValue else {
-            return false
-        }
-        
-        let acceptableRanges: [Range<Int>] = [(97...122), (65...90)]
-        return acceptableRanges.contains(where: { range in
-            range.contains(<#T##element: Int##Int#>)
-        })
+func sha256(data : Data) -> Data {
+    var hash = [UInt8](repeating: 0,  count: Int(CC_SHA256_DIGEST_LENGTH))
+    data.withUnsafeBytes {
+        _ = CC_SHA256($0.baseAddress, CC_LONG(data.count), &hash)
     }
+    return Data(hash)
 }
 
-let characters: [Character] = ["a", "z", "A", "Z"]
 
-characters.forEach {
-    print("-=- \($0) \($0.asciiValue)")
+let myString = "my cusyom dytin ghet"
+
+if let myStringAsData = myString.data(using: .utf8) {
+    let result = sha256(data: myStringAsData)
+    
+    
+    print(result)
+    print(String(data: result, encoding: .utf8))
+    dump(result)
+
 }
+
